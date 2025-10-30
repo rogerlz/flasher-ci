@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# Build outputs
+builds/*/
+!builds/.gitkeep
+
+# Keep example kconfig but ignore actual configs if needed
+# kconfigs/*.kconfig
+# !kconfigs/example.kconfig
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

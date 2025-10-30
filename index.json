@@ -1,0 +1,313 @@
+{
+    "builds": [
+        {
+            "version": "v0.12.0-125"
+        },
+        {
+            "version": "v0.12.0-123"
+        }
+    ],
+    "vendors": [
+        {
+            "vendorId": "bigtreetech",
+            "displayName": "BigTreeTech",
+            "websiteUrl": "https://bigtreetech.com/"
+        },
+        {
+            "vendorId": "fysetc",
+            "displayName": "FYSETC",
+            "websiteUrl": "https://fysetc.com/"
+        }
+    ],
+    "targets": [
+        {
+            "targetId": "manta_m4p",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11pa12",
+                        "usb2can_pa11pa12_pd0pd1_500k",
+                        "usb2can_pa11pa12_pd0pd1_1M",
+                        "can_pd0pd1_500k",
+                        "can_pd0pd1_1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "manta_m5p",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M5P/blob/master/BIGTREETECH_MANTA_M5P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11pa12",
+                        "usb2can_pa11pa12_pd0pd1_500k",
+                        "usb2can_pa11pa12_pd0pd1_1M",
+                        "can_pd0pd1_500k",
+                        "can_pd0pd1_1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "manta_m8p_v1.0",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "manta_m8p_v1.1",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "manta_m8p_v2",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "skr_mini_e3_v3.0",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pa3_pa2"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "skr_mini_e3_v3.0.1",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pa3_pa2"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "octopus_pro_1_0_stm32f446",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pd5_pd6",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "octopus_pro_1_0_stm32f429",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pd5_pd6",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "octopus_pro_1_1",
+            "vendorId": "bigtreetech",
+            "flashMethod": "dfu-util-webserial",
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig",
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pd5_pd6",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                }
+            }
+        },
+        {
+            "targetId": "skr_pico",
+            "vendorId": "bigtreetech",
+            "flashMethod": [
+                "rp-reset-uf2drive"
+            ],
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "permutations": {
+                    "interface": [
+                        "usb",
+                        "uart0_gpio0_gpio1"
+                    ]
+                },
+                "fileTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kconfigTemplate": "{targetId}_{vendorId}_{interface}.kconfig"
+            }
+        },
+        {
+            "targetId": "kraken_1_0",
+            "vendorId": "bigtreetech",
+            "flashMethod": [
+                "dfu-util-webserial"
+            ],
+            "links": {
+                "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
+                "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
+                "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "configuration": {
+                "permutations": {
+                    "interface": [
+                        "usb_pa11_pa12",
+                        "uart2_pd5_pd6",
+                        "usb_to_can_bridge_pa11_pa12_pd0_pd1",
+                        "can_pd0_pd1"
+                    ],
+                    "can_speed": [
+                        "500k",
+                        "1M"
+                    ]
+                },
+                "fileTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.bin",
+                "kconfigTemplate": "{targetId}_{vendorId}_{interface}_{can_speed}.kconfig"
+            }
+        }
+    ]
+}

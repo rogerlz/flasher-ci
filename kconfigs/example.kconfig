@@ -1,0 +1,24 @@
+# Example Kalico configuration file
+# This is a placeholder - replace with actual Kalico .config files
+#
+# To generate real configs:
+# 1. cd to your Kalico directory
+# 2. Run: make menuconfig
+# 3. Configure your board settings
+# 4. Copy .config to this directory with the appropriate filename
+#
+# Filename should match the kconfigFilenameTemplate in index.json
+# Example: manta_m8p_v1.1_bigtreetech_usb_pa11_pa12_500k.kconfig
+
+CONFIG_LOW_LEVEL_OPTIONS=y
+CONFIG_MACH_STM32=y
+CONFIG_BOARD_DIRECTORY="stm32"
+CONFIG_MCU="stm32g0b1xx"
+CONFIG_CLOCK_FREQ=64000000
+CONFIG_FLASH_START=0x8000000
+CONFIG_FLASH_SIZE=0x20000
+CONFIG_RAM_START=0x20000000
+CONFIG_RAM_SIZE=0x20000
+CONFIG_STACK_SIZE=512
+CONFIG_STM32_SELECT=y
+# ... (additional Kalico config options)
