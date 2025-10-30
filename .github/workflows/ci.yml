@@ -10,7 +10,7 @@ jobs:
   validate:
     name: Validate Configuration
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -67,18 +67,18 @@ jobs:
 
           # Get all vendor IDs from vendors array
           vendor_ids = {v['vendorId'] for v in data.get('vendors', [])}
-          
+
           # Get all vendor IDs used in targets
           target_vendor_ids = {t['vendorId'] for t in data.get('targets', [])}
-          
+
           # Check for missing vendors
           missing_vendors = target_vendor_ids - vendor_ids
-          
+
           if missing_vendors:
               print(f'❌ Missing vendor definitions for: {sorted(missing_vendors)}')
               print('Add these vendors to index.json vendors array')
               sys.exit(1)
-          
+
           print(f'✓ All {len(target_vendor_ids)} vendors used in targets are defined')
           "
 
@@ -92,20 +92,20 @@ jobs:
               data = json.load(f)
 
           errors = []
-          
+
           for target in data.get('targets', []):
               target_id = target.get('targetId', 'unknown')
-              
+
               # Check required fields
               required_fields = ['targetId', 'vendorId', 'displayName', 'flashMethods', 'configuration']
               for field in required_fields:
                   if field not in target:
                       errors.append(f'{target_id}: missing required field \"{field}\"')
-              
+
               # Check flashMethods is array
               if 'flashMethods' in target and not isinstance(target['flashMethods'], list):
                   errors.append(f'{target_id}: flashMethods must be an array')
-              
+
               # Check configuration has required fields
               config = target.get('configuration', {})
               if 'firmwareFilenameTemplate' not in config and 'fileTemplate' not in config:
@@ -114,13 +114,13 @@ jobs:
                   errors.append(f'{target_id}: missing kconfigFilenameTemplate')
               if 'permutations' not in config:
                   errors.append(f'{target_id}: missing permutations')
-          
+
           if errors:
               print('❌ Target schema validation errors:')
               for error in errors:
                   print(f'  - {error}')
               sys.exit(1)
-          
+
           print(f'✓ All {len(data.get(\"targets\", []))} targets have valid schema')
           "
 
@@ -134,16 +134,16 @@ jobs:
               data = json.load(f)
 
           builds = data.get('builds', None)
-          
+
           if builds is None:
               print('❌ index-template.json must have a \"builds\" key')
               sys.exit(1)
-          
+
           if builds != []:
               print('❌ index-template.json builds array must be empty []')
               print('   Builds are generated dynamically by build.py')
               sys.exit(1)
-          
+
           print('✓ Template has empty builds array')
           "
 

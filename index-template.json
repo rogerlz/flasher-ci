@@ -1,61 +1,89 @@
 {
-    "vendors": [
-        {
-            "vendorId": "bigtreetech",
-            "displayName": "BigTreeTech",
-            "websiteUrl": "https://bigtreetech.com/"
-        },
-        {
-            "vendorId": "fysetc",
-            "displayName": "FYSETC",
-            "websiteUrl": "https://fysetc.com/"
-        }
-    ],
+    "builds": [],
     "configurations": [
         {
-            "id": "interface",
             "displayName": "Interface to host",
+            "id": "interface",
             "permutations": [
                 {
-                    "id": "usb_pa11pa12",
-                    "displayName": "USB Serial on PA11 & PA12"
+                    "displayName": "USB Serial on PA11 & PA12",
+                    "id": "usb_pa11pa12"
                 },
                 {
-                    "id": "usb2can_pa11pa12_pd0pd1_500k",
-                    "displayName": "USB2CAN on PA11 & PA12 with 500k baudrate"
+                    "displayName": "USB2CAN on PA11 & PA12 with 500k baudrate",
+                    "id": "usb2can_pa11pa12_pd0pd1_500k"
                 },
                 {
-                    "id": "usb2can_pa11pa12_pd0pd1_1M",
-                    "displayName": "USB2CAN on PA11 & PA12 with 1M baudrate"
+                    "displayName": "USB2CAN on PA11 & PA12 with 1M baudrate",
+                    "id": "usb2can_pa11pa12_pd0pd1_1M"
                 },
                 {
-                    "id": "can_pd0pd1_500k",
-                    "displayName": "CAN on PD0 & PD1 with 500k baudrate"
+                    "displayName": "CAN on PD0 & PD1 with 500k baudrate",
+                    "id": "can_pd0pd1_500k"
                 },
                 {
-                    "id": "can_pd0pd1_1M",
-                    "displayName": "CAN on PD0 & PD1 with 1M baudrate"
+                    "displayName": "CAN on PD0 & PD1 with 1M baudrate",
+                    "id": "can_pd0pd1_1M"
                 },
                 {
-                    "id": "uart0_gpio0gpio1",
-                    "displayName": "UART0 on GPIO0 & GPIO1"
+                    "displayName": "UART0 on GPIO0 & GPIO1",
+                    "id": "uart0_gpio0gpio1"
                 },
                 {
-                    "id": "usb",
-                    "displayName": "USB"
+                    "displayName": "USB",
+                    "id": "usb"
                 },
                 {
-                    "id": "uart2_pa3pa2",
-                    "displayName": "UART2 on PA3 & PA2"
+                    "displayName": "UART2 on PA3 & PA2",
+                    "id": "uart2_pa3pa2"
+                }
+            ]
+        },
+        {
+            "displayName": "Bootloader",
+            "id": "bootloader",
+            "permutations": [
+                {
+                    "displayName": "Katapult",
+                    "id": "katapult"
+                },
+                {
+                    "displayName": "No bootloader",
+                    "id": "none"
+                },
+                {
+                    "displayName": "16 KiB offset",
+                    "id": "offset_16kib"
+                },
+                {
+                    "displayName": "32 KiB offset",
+                    "id": "offset_32kib"
                 }
             ]
         }
     ],
-    "builds": [],
     "targets": [
         {
-            "targetId": "manta_m4p",
-            "vendorId": "bigtreetech",
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
+                    "interface": [
+                        "usb_pa11pa12",
+                        "usb2can_pa11pa12_pd0pd1_500k",
+                        "usb2can_pa11pa12_pd0pd1_1M",
+                        "can_pd0pd1_500k",
+                        "can_pd0pd1_1M"
+                    ]
+                }
+            },
             "displayName": "Manta M4P",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -65,10 +93,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "manta_m4p",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -77,11 +116,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "manta_m5p",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Manta M5P",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -91,10 +126,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "manta_m5p",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -103,11 +149,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "manta_m8p_v1.0",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Manta M8P V1.0",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -117,10 +159,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "manta_m8p_v1.0",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -129,11 +182,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "manta_m8p_v1.1",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Manta M8P V1.1",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -143,10 +192,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "manta_m8p_v1.1",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -155,11 +215,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "manta_m8p_v2",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Manta M8P V2.0",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -169,23 +225,27 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
-            "configuration": {
-                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
-                "permutations": {
-                    "interface": [
-                        "usb_pa11pa12",
-                        "usb2can_pa11pa12_pd0pd1_500k",
-                        "usb2can_pa11pa12_pd0pd1_1M",
-                        "can_pd0pd1_500k",
-                        "can_pd0pd1_1M"
-                    ]
-                }
-            }
+            "targetId": "manta_m8p_v2",
+            "vendorId": "bigtreetech"
         },
         {
-            "targetId": "skr_mini_e3_v3.0",
-            "vendorId": "bigtreetech",
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
+                    "interface": [
+                        "usb_pa11pa12",
+                        "uart2_pa3pa2"
+                    ]
+                }
+            },
             "displayName": "SKR Mini E3 V3.0",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -195,20 +255,27 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "skr_mini_e3_v3.0",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "uart2_pa3pa2"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "skr_mini_e3_v3.0.1",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "SKR Mini E3 V3.0.1",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -218,20 +285,30 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
-            "configuration": {
-                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
-                "permutations": {
-                    "interface": [
-                        "usb_pa11pa12",
-                        "uart2_pa3pa2"
-                    ]
-                }
-            }
+            "targetId": "skr_mini_e3_v3.0.1",
+            "vendorId": "bigtreetech"
         },
         {
-            "targetId": "octopus_pro_1_0_stm32f446",
-            "vendorId": "bigtreetech",
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
+                    "interface": [
+                        "usb_pa11pa12",
+                        "usb2can_pa11pa12_pd0pd1_500k",
+                        "usb2can_pa11pa12_pd0pd1_1M",
+                        "can_pd0pd1_500k",
+                        "can_pd0pd1_1M"
+                    ]
+                }
+            },
             "displayName": "Octopus Pro V1.0 (STM32F446)",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -241,10 +318,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "octopus_pro_1_0_stm32f446",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -253,11 +341,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "octopus_pro_1_0_stm32f429",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Octopus Pro V1.0 (STM32F429)",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -267,10 +351,21 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "octopus_pro_1_0_stm32f429",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
                     "interface": [
                         "usb_pa11pa12",
                         "usb2can_pa11pa12_pd0pd1_500k",
@@ -279,11 +374,7 @@
                         "can_pd0pd1_1M"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "octopus_pro_1_1",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "Octopus Pro V1.1",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -293,23 +384,20 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "targetId": "octopus_pro_1_1",
+            "vendorId": "bigtreetech"
+        },
+        {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
                 "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
                 "permutations": {
                     "interface": [
-                        "usb_pa11pa12",
-                        "usb2can_pa11pa12_pd0pd1_500k",
-                        "usb2can_pa11pa12_pd0pd1_1M",
-                        "can_pd0pd1_500k",
-                        "can_pd0pd1_1M"
+                        "usb",
+                        "uart0_gpio0gpio1"
                     ]
                 }
-            }
-        },
-        {
-            "targetId": "skr_pico",
-            "vendorId": "bigtreetech",
+            },
             "displayName": "SKR Pico V1.0",
             "flashMethods": [
                 "rp-reset-uf2drive"
@@ -319,20 +407,30 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
-            "configuration": {
-                "permutations": {
-                    "interface": [
-                        "usb",
-                        "uart0_gpio0gpio1"
-                    ]
-                },
-                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig"
-            }
+            "targetId": "skr_pico",
+            "vendorId": "bigtreetech"
         },
         {
-            "targetId": "kraken_1_0",
-            "vendorId": "bigtreetech",
+            "configuration": {
+                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
+                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "permutations": {
+                    "bootloader": [
+                        "katapult",
+                        "none",
+                        "offset_16kib",
+                        "offset_32kib"
+                    ],
+                    "interface": [
+                        "usb_pa11pa12",
+                        "usb2can_pa11pa12_pd0pd1_500k",
+                        "usb2can_pa11pa12_pd0pd1_1M",
+                        "can_pd0pd1_500k",
+                        "can_pd0pd1_1M"
+                    ]
+                }
+            },
             "displayName": "Kraken V1.0",
             "flashMethods": [
                 "dfu-util-webserial"
@@ -342,19 +440,20 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
-            "configuration": {
-                "permutations": {
-                    "interface": [
-                        "usb_pa11pa12",
-                        "usb2can_pa11pa12_pd0pd1_500k",
-                        "usb2can_pa11pa12_pd0pd1_1M",
-                        "can_pd0pd1_500k",
-                        "can_pd0pd1_1M"
-                    ]
-                },
-                "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig"
-            }
+            "targetId": "kraken_1_0",
+            "vendorId": "bigtreetech"
+        }
+    ],
+    "vendors": [
+        {
+            "displayName": "BigTreeTech",
+            "vendorId": "bigtreetech",
+            "websiteUrl": "https://bigtreetech.com/"
+        },
+        {
+            "displayName": "FYSETC",
+            "vendorId": "fysetc",
+            "websiteUrl": "https://fysetc.com/"
         }
     ]
 }

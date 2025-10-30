@@ -79,7 +79,7 @@ errors = []
 for target in data.get('targets', []):
     target_id = target.get('targetId', 'unknown')
     required_fields = ['targetId', 'vendorId', 'displayName', 'flashMethods', 'configuration']
-    
+
     for field in required_fields:
         if field not in target:
             errors.append(f'{target_id}: missing {field}')

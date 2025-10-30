@@ -167,7 +167,7 @@ python -m json.tool index-template.json > index-template.json.tmp && mv index-te
 
 ### Note on index.json
 
-`index.json` is **generated automatically** from `index-template.json` by `build.py`. 
+`index.json` is **generated automatically** from `index-template.json` by `build.py`.
 - ✅ Edit `index-template.json` (committed to git)
 - ❌ Don't edit `index.json` (git-ignored, generated file)
 

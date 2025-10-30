@@ -29,6 +29,7 @@ class KalicoBuilder:
         self.index_file = self.root_dir / "index.json"
         self.kconfigs_dir = self.root_dir / "kconfigs"
         self.builds_dir = self.root_dir / "builds"
+        self.firmware_types = ["kalico", "katapult"]
 
     def load_index_template(self) -> dict[str, Any]:
         """Load the index-template.json file"""
@@ -83,50 +84,73 @@ class KalicoBuilder:
         """Get template from config with fallback support"""
         return config.get(primary_key) or config.get(fallback_key) or default
 
-    def get_kconfig_filename(self, target: dict[str, Any], permutation: dict[str, str]) -> str:
+    def get_kconfig_filename(
+        self, target: dict[str, Any], permutation: dict[str, str], firmware_type: str = "kalico"
+    ) -> str:
         """Get the kconfig filename for a target and permutation"""
         config = target.get("configuration", {})
+        template_key = f"{firmware_type}FilenameTemplate"
+        fallback_key = "kconfigFilenameTemplate" if firmware_type == "kalico" else None
         template = self._get_template(
             config,
-            "kconfigFilenameTemplate",
-            "kconfigTemplate",
+            template_key,
+            fallback_key or template_key,
             "{targetId}_{vendorId}.kconfig",
         )
         return self.format_filename(template, target, permutation)
 
-    def get_firmware_filename(self, target: dict[str, Any], permutation: dict[str, str]) -> str:
+    def get_firmware_filename(
+        self, target: dict[str, Any], permutation: dict[str, str], firmware_type: str = "kalico"
+    ) -> str:
         """Get the firmware filename for a target and permutation"""
         config = target.get("configuration", {})
-        template = self._get_template(
-            config,
-            "firmwareFilenameTemplate",
-            "fileTemplate",
-            "{targetId}_{vendorId}.bin",
-        )
+
+        # For Kalico, use firmwareFilenameTemplate
+        if firmware_type == "kalico":
+            template = self._get_template(
+                config,
+                "firmwareFilenameTemplate",
+                "fileTemplate",
+                "{targetId}_{vendorId}.bin",
+            )
+        else:
+            # For Katapult, derive from katapultFilenameTemplate by replacing .kconfig with .bin
+            kconfig_template = config.get(f"{firmware_type}FilenameTemplate", "")
+            if kconfig_template:
+                template = kconfig_template.replace(".kconfig", ".bin")
+            else:
+                template = "{targetId}_{vendorId}.bin"
+
         return self.format_filename(template, target, permutation)
 
-    def compile_kalico(
+    def compile_firmware(
         self,
         kconfig_path: Path,
         output_path: Path,
-        kalico_dir: Path,
+        source_dir: Path,
+        firmware_type: str,
         dry_run: bool = False,
     ) -> bool:
-        """Compile Kalico firmware with a given kconfig"""
+        """Compile firmware (Kalico or Katapult) with a given kconfig"""
         try:
             if not dry_run:
-                shutil.copy(kconfig_path, kalico_dir / ".config")
-                subprocess.run(["make", "clean"], cwd=kalico_dir, check=True, capture_output=True)
+                shutil.copy(kconfig_path, source_dir / ".config")
+                subprocess.run(["make", "clean"], cwd=source_dir, check=True, capture_output=True)
                 subprocess.run(
                     ["make", "-j", str(os.cpu_count() or 1)],
-                    cwd=kalico_dir,
+                    cwd=source_dir,
                     check=True,
                     capture_output=True,
                 )
 
-                # Try possible firmware output names
-                for firmware_name in ["klipper.bin", "klipper.elf"]:
-                    firmware_source = kalico_dir / "out" / firmware_name
+                # Try possible firmware output names based on type
+                if firmware_type == "kalico":
+                    possible_names = ["klipper.bin", "klipper.elf", "klipper.uf2"]
+                else:  # katapult
+                    possible_names = ["deployer.bin", "deployer.elf", "deployer.uf2"]
+
+                for firmware_name in possible_names:
+                    firmware_source = source_dir / "out" / firmware_name
                     if firmware_source.exists():
                         shutil.copy(firmware_source, output_path)
                         print(f"  ✓ {output_path.name}")
@@ -145,15 +169,20 @@ class KalicoBuilder:
             print(f"  ✗ {output_path.name} - {e}")
             return False
 
-    def build(self, version: str, kalico_dir: str, commit_url: str = "", dry_run: bool = False):
+    def build(self, version: str, kalico_dir: str, katapult_dir: str = "", commit_url: str = "", dry_run: bool = False):
         """Build all firmware targets"""
         kalico_path = Path(kalico_dir).resolve()
+        katapult_path = Path(katapult_dir).resolve() if katapult_dir else None
 
-        if not dry_run and not kalico_path.exists():
-            print("Error: Kalico directory not found")
-            sys.exit(1)
+        if not dry_run:
+            if not kalico_path.exists():
+                print("Error: Kalico directory not found")
+                sys.exit(1)
+            if katapult_path and not katapult_path.exists():
+                print("Error: Katapult directory not found")
+                sys.exit(1)
 
-        index = self.load_index()
+        index = self.load_index_template()
 
         version_dir = self.builds_dir / version
         version_dir.mkdir(parents=True, exist_ok=True)
@@ -175,22 +204,35 @@ class KalicoBuilder:
             metadata["targets"].append(self._create_target_metadata(target))
 
             for permutation in permutations:
-                total_builds += 1
+                # Build both Kalico and Katapult for each permutation
+                for firmware_type in self.firmware_types:
+                    total_builds += 1
 
-                # Get filenames
-                kconfig_filename = self.get_kconfig_filename(target, permutation)
-                firmware_filename = self.get_firmware_filename(target, permutation)
+                    # Skip Katapult if directory not provided
+                    if firmware_type == "katapult" and not katapult_path:
+                        continue
 
-                kconfig_path = self.kconfigs_dir / kconfig_filename
-                firmware_path = version_dir / firmware_filename
+                    # Get filenames
+                    kconfig_filename = self.get_kconfig_filename(target, permutation, firmware_type)
+                    firmware_filename = self.get_firmware_filename(target, permutation, firmware_type)
 
-                if not kconfig_path.exists():
-                    print(f"  ⚠ {kconfig_filename} - not found")
-                    continue
+                    kconfig_path = self.kconfigs_dir / kconfig_filename
+                    firmware_path = version_dir / firmware_filename
 
-                # Compile
-                if self.compile_kalico(kconfig_path, firmware_path, kalico_path, dry_run):
-                    successful_builds += 1
+                    if not kconfig_path.exists():
+                        print(f"  ⚠ {kconfig_filename} - not found")
+                        continue
+
+                    # For Katapult, check if firmware already exists and reuse it
+                    if firmware_type == "katapult" and firmware_path.exists() and not dry_run:
+                        print(f"  ↻ {firmware_filename} - reusing existing")
+                        successful_builds += 1
+                        continue
+
+                    # Compile
+                    source_dir = kalico_path if firmware_type == "kalico" else katapult_path
+                    if self.compile_firmware(kconfig_path, firmware_path, source_dir, firmware_type, dry_run):
+                        successful_builds += 1
 
         # Save metadata
         metadata_path = version_dir / "metadata.json"
@@ -212,7 +254,8 @@ class KalicoBuilder:
             "vendorId": target.get("vendorId"),
             "configuration": {
                 "firmwareFilenameTemplate": config.get("firmwareFilenameTemplate") or config.get("fileTemplate"),
-                "kconfigFilenameTemplate": config.get("kconfigFilenameTemplate") or config.get("kconfigTemplate"),
+                "kalicoFilenameTemplate": config.get("kalicoFilenameTemplate") or config.get("kconfigFilenameTemplate"),
+                "katapultFilenameTemplate": config.get("katapultFilenameTemplate"),
                 "permutations": config.get("permutations", {}),
             },
         }
@@ -269,7 +312,7 @@ class KalicoBuilder:
     def check_configurations(self):
         """Check for permutation values used in targets but missing from configurations catalog"""
 
-        index = self.load_index()
+        index = self.load_index_template()
         targets = index.get("targets", [])
         configurations = index.get("configurations", [])
 
@@ -297,7 +340,7 @@ class KalicoBuilder:
     def validate_kconfigs(self):
         """Validate that all required kconfig files exist"""
 
-        index = self.load_index()
+        index = self.load_index_template()
         targets = index.get("targets", [])
 
         missing_files = []
@@ -308,14 +351,16 @@ class KalicoBuilder:
             permutations = self.generate_permutations(target)
 
             for permutation in permutations:
-                total_configs += 1
-                kconfig_filename = self.get_kconfig_filename(target, permutation)
-                kconfig_path = self.kconfigs_dir / kconfig_filename
+                # Check both Kalico and Katapult kconfigs
+                for firmware_type in self.firmware_types:
+                    total_configs += 1
+                    kconfig_filename = self.get_kconfig_filename(target, permutation, firmware_type)
+                    kconfig_path = self.kconfigs_dir / kconfig_filename
 
-                if kconfig_path.exists():
-                    existing_files.append(kconfig_filename)
-                else:
-                    missing_files.append(kconfig_filename)
+                    if kconfig_path.exists():
+                        existing_files.append(kconfig_filename)
+                    else:
+                        missing_files.append(kconfig_filename)
 
         pct = len(existing_files) * 100 // total_configs if total_configs > 0 else 0
 
@@ -455,6 +500,7 @@ Examples:
     build_parser = subparsers.add_parser("build", help="Build firmware for all targets")
     build_parser.add_argument("version", help="Version string (e.g., v0.12.0-124)")
     build_parser.add_argument("--kalico-dir", required=True, help="Path to Kalico source directory")
+    build_parser.add_argument("--katapult-dir", default="", help="Path to Katapult source directory (optional)")
     build_parser.add_argument(
         "--commit-url",
         default="",
@@ -495,7 +541,7 @@ Examples:
     builder = KalicoBuilder(args.root_dir)
 
     if args.command == "build":
-        builder.build(args.version, args.kalico_dir, args.commit_url, args.dry_run)
+        builder.build(args.version, args.kalico_dir, args.katapult_dir, args.commit_url, args.dry_run)
     elif args.command == "check-configurations":
         builder.check_configurations()
     elif args.command == "validate":

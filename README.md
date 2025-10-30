@@ -113,7 +113,7 @@ Template configuration defining (committed to git):
 
 ### index.json (Generated)
 
-Generated file (git-ignored) created by `build.py` from `index-template.json` + builds from `builds/` directory.  
+Generated file (git-ignored) created by `build.py` from `index-template.json` + builds from `builds/` directory.
 **Do not edit manually** - edit `index-template.json` instead.
 
 ### Target Configuration
@@ -193,7 +193,7 @@ Each target defines:
 
 ## Configuration
 
-**S3 Bucket:** Set in `build.py` → `S3_BUCKET = "kalico-flasher"`  
+**S3 Bucket:** Set in `build.py` → `S3_BUCKET = "kalico-flasher"`
 **CloudFront Distribution:** Set in `build.py` → `CLOUDFRONT_DISTRIBUTION_ID = "E12YCK1HLQNF8F"`
 
 ## Development
