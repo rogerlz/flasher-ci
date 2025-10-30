@@ -8,8 +8,11 @@ env/
 venv/
 .venv
 
+# Generated files (built from index-template.json)
+index.json
+
 # Build outputs
-builds/*/
+builds/
 !builds/.gitkeep
 
 # Keep example kconfig but ignore actual configs if needed

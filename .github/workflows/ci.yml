@@ -1,0 +1,162 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate Configuration
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          pip install -e .
+          pip install ruff
+
+      - name: Check Python formatting (ruff format)
+        run: ruff format --check .
+
+      - name: Lint Python code (ruff check)
+        run: ruff check .
+
+      - name: Validate JSON formatting
+        run: |
+          python -m json.tool index-template.json > /tmp/index-template.json
+          if ! diff -q index-template.json /tmp/index-template.json > /dev/null; then
+            echo "❌ index-template.json is not properly formatted"
+            echo "Run: python -m json.tool index-template.json > index-template.json.tmp && mv index-template.json.tmp index-template.json"
+            exit 1
+          fi
+          echo "✓ index-template.json is properly formatted"
+
+      - name: Generate index.json from template
+        run: |
+          echo "Generating index.json from index-template.json..."
+          python build.py rebuild-index || true  # Create empty index if no builds exist
+
+      - name: Validate configuration completeness
+        run: |
+          echo "Checking for missing configuration displayNames..."
+          python build.py check-configurations
+
+      - name: Validate kconfig files exist
+        run: |
+          echo "Checking for missing kconfig files..."
+          python build.py validate
+
+      - name: Validate vendors consistency
+        run: |
+          python -c "
+          import json
+          import sys
+
+          with open('index-template.json') as f:
+              data = json.load(f)
+
+          # Get all vendor IDs from vendors array
+          vendor_ids = {v['vendorId'] for v in data.get('vendors', [])}
+          
+          # Get all vendor IDs used in targets
+          target_vendor_ids = {t['vendorId'] for t in data.get('targets', [])}
+          
+          # Check for missing vendors
+          missing_vendors = target_vendor_ids - vendor_ids
+          
+          if missing_vendors:
+              print(f'❌ Missing vendor definitions for: {sorted(missing_vendors)}')
+              print('Add these vendors to index.json vendors array')
+              sys.exit(1)
+          
+          print(f'✓ All {len(target_vendor_ids)} vendors used in targets are defined')
+          "
+
+      - name: Validate target schema
+        run: |
+          python -c "
+          import json
+          import sys
+
+          with open('index-template.json') as f:
+              data = json.load(f)
+
+          errors = []
+          
+          for target in data.get('targets', []):
+              target_id = target.get('targetId', 'unknown')
+              
+              # Check required fields
+              required_fields = ['targetId', 'vendorId', 'displayName', 'flashMethods', 'configuration']
+              for field in required_fields:
+                  if field not in target:
+                      errors.append(f'{target_id}: missing required field \"{field}\"')
+              
+              # Check flashMethods is array
+              if 'flashMethods' in target and not isinstance(target['flashMethods'], list):
+                  errors.append(f'{target_id}: flashMethods must be an array')
+              
+              # Check configuration has required fields
+              config = target.get('configuration', {})
+              if 'firmwareFilenameTemplate' not in config and 'fileTemplate' not in config:
+                  errors.append(f'{target_id}: missing firmwareFilenameTemplate')
+              if 'kconfigFilenameTemplate' not in config and 'kconfigTemplate' not in config:
+                  errors.append(f'{target_id}: missing kconfigFilenameTemplate')
+              if 'permutations' not in config:
+                  errors.append(f'{target_id}: missing permutations')
+          
+          if errors:
+              print('❌ Target schema validation errors:')
+              for error in errors:
+                  print(f'  - {error}')
+              sys.exit(1)
+          
+          print(f'✓ All {len(data.get(\"targets\", []))} targets have valid schema')
+          "
+
+      - name: Validate template has empty builds array
+        run: |
+          python -c "
+          import json
+          import sys
+
+          with open('index-template.json') as f:
+              data = json.load(f)
+
+          builds = data.get('builds', None)
+          
+          if builds is None:
+              print('❌ index-template.json must have a \"builds\" key')
+              sys.exit(1)
+          
+          if builds != []:
+              print('❌ index-template.json builds array must be empty []')
+              print('   Builds are generated dynamically by build.py')
+              sys.exit(1)
+          
+          print('✓ Template has empty builds array')
+          "
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "✅ All validations passed!"
+          echo ""
+          echo "Validated:"
+          echo "  - Python code formatting (ruff)"
+          echo "  - JSON formatting"
+          echo "  - Configuration displayNames completeness"
+          echo "  - Kconfig files existence"
+          echo "  - Vendor consistency"
+          echo "  - Target schema"
+          echo "  - Build schema"
