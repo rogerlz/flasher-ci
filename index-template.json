@@ -66,8 +66,8 @@
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -93,14 +93,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_manta_m4p.png"
+            },
             "targetId": "manta_m4p",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -126,14 +129,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_manta_m5p.png"
+            },
             "targetId": "manta_m5p",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -159,14 +165,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_manta_m8p_v1.0.png"
+            },
             "targetId": "manta_m8p_v1.0",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -192,14 +201,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_manta_m8p_v1.0.png"
+            },
             "targetId": "manta_m8p_v1.1",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -225,14 +237,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_manta_m8p_v2.0.png"
+            },
             "targetId": "manta_m8p_v2",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -255,14 +270,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_skr_mini_e3_v3.0.png"
+            },
             "targetId": "skr_mini_e3_v3.0",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -285,14 +303,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_skr_mini_e3_v3.0.1.png"
+            },
             "targetId": "skr_mini_e3_v3.0.1",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -318,14 +339,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_octopus_pro_1_0_stm32f446.png"
+            },
             "targetId": "octopus_pro_1_0_stm32f446",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -351,14 +375,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_octopus_pro_1_0_stm32f429.png"
+            },
             "targetId": "octopus_pro_1_0_stm32f429",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -384,13 +411,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_octopus_pro_1_1.png"
+            },
             "targetId": "octopus_pro_1_1",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "kalicoKconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
+                "katapultKconfigFilenameTemplate": "{targetId}_{vendorId}_{interface}.kconfig",
                 "permutations": {
                     "interface": [
                         "usb",
@@ -407,14 +438,17 @@
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
             },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_skr_pico.png"
+            },
             "targetId": "skr_pico",
             "vendorId": "bigtreetech"
         },
         {
             "configuration": {
                 "firmwareFilenameTemplate": "{targetId}_{vendorId}_{interface}.bin",
-                "kalicoFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
-                "katapultFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "kalicoKconfigFilenameTemplate": "kalico-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
+                "katapultKconfigFilenameTemplate": "katapult-{targetId}_{vendorId}_{interface}_{bootloader}.kconfig",
                 "permutations": {
                     "bootloader": [
                         "katapult",
@@ -439,6 +473,9 @@
                 "manualUrl": "https://github.com/bigtreetech/Manta-M4P/blob/master/BIGTREETECH_MANTA_M4P_User_Manual.pdf",
                 "pinoutUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0%20PinOut.png",
                 "schematicUrl": "https://github.com/bigtreetech/Manta-M8P/blob/master/V2.0/Hardware/BIGTREETECH%20MANTA%20M8P%20V2.0-SCH.pdf"
+            },
+            "meta": {
+                "productImagePath": "/images/bigtreetech_kraken_1_0.png"
             },
             "targetId": "kraken_1_0",
             "vendorId": "bigtreetech"

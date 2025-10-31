@@ -28,6 +28,7 @@ class KalicoBuilder:
         self.index_template_file = self.root_dir / "index-template.json"
         self.index_file = self.root_dir / "index.json"
         self.kconfigs_dir = self.root_dir / "kconfigs"
+        self.images_dir = self.root_dir / "images"
         self.builds_dir = self.root_dir / "builds"
         self.firmware_types = ["kalico", "katapult"]
 
@@ -89,7 +90,9 @@ class KalicoBuilder:
     ) -> str:
         """Get the kconfig filename for a target and permutation"""
         config = target.get("configuration", {})
-        template_key = f"{firmware_type}FilenameTemplate"
+        # Try new naming convention first: kalicoKconfigFilenameTemplate, katapultKconfigFilenameTemplate
+        template_key = f"{firmware_type}KconfigFilenameTemplate"
+        # Fallback to old naming conventions
         fallback_key = "kconfigFilenameTemplate" if firmware_type == "kalico" else None
         template = self._get_template(
             config,
@@ -249,7 +252,7 @@ class KalicoBuilder:
     def _create_target_metadata(self, target: dict[str, Any]) -> dict[str, Any]:
         """Create normalized target metadata for TargetReleaseBundle"""
         config = target.get("configuration", {})
-        return {
+        metadata = {
             "targetId": target.get("targetId"),
             "vendorId": target.get("vendorId"),
             "configuration": {
@@ -259,6 +262,12 @@ class KalicoBuilder:
                 "permutations": config.get("permutations", {}),
             },
         }
+
+        # Include meta field if present (e.g., productImagePath)
+        if "meta" in target:
+            metadata["meta"] = target["meta"]
+
+        return metadata
 
     def _create_build_entry(self, version: str, commit_url: str = "") -> dict[str, Any]:
         """Create a build entry with current timestamp"""
@@ -338,59 +347,120 @@ class KalicoBuilder:
             print(f"✓ All {len(used_values)} permutation values have displayNames")
 
     def validate_kconfigs(self):
-        """Validate that all required kconfig files exist"""
+        """Validate that all required kconfig files and images exist"""
+        print(f"Validating kconfig files in {self.kconfigs_dir}\n")
 
+        # Read from template, not generated index.json
         index = self.load_index_template()
         targets = index.get("targets", [])
 
-        missing_files = []
-        existing_files = []
+        missing_kconfigs = []
+        existing_kconfigs = []
+        missing_images = []
+        existing_images = []
         total_configs = 0
 
         for target in targets:
+            target_id = target.get("targetId")
+            print(f"[{target_id}]")
+
+            # Check product image
+            meta = target.get("meta", {})
+            product_image_path = meta.get("productImagePath")
+            if product_image_path:
+                # Remove leading slash if present
+                image_path = product_image_path.lstrip("/")
+                full_image_path = self.root_dir / image_path
+
+                if full_image_path.exists():
+                    existing_images.append(image_path)
+                    print(f"  ✓ Image: {image_path}")
+                else:
+                    missing_images.append(image_path)
+                    print(f"  ✗ Image: {image_path}")
+
             permutations = self.generate_permutations(target)
 
             for permutation in permutations:
-                # Check both Kalico and Katapult kconfigs
-                for firmware_type in self.firmware_types:
-                    total_configs += 1
-                    kconfig_filename = self.get_kconfig_filename(target, permutation, firmware_type)
-                    kconfig_path = self.kconfigs_dir / kconfig_filename
+                total_configs += 1
+                kconfig_filename = self.get_kconfig_filename(target, permutation)
+                kconfig_path = self.kconfigs_dir / kconfig_filename
 
-                    if kconfig_path.exists():
-                        existing_files.append(kconfig_filename)
-                    else:
-                        missing_files.append(kconfig_filename)
+                if kconfig_path.exists():
+                    existing_kconfigs.append(kconfig_filename)
+                    print(f"  ✓ {kconfig_filename}")
+                else:
+                    missing_kconfigs.append(kconfig_filename)
+                    print(f"  ✗ {kconfig_filename}")
 
-        pct = len(existing_files) * 100 // total_configs if total_configs > 0 else 0
+            print()  # Empty line between targets
 
-        if missing_files:
-            print(f"Missing {len(missing_files)}/{total_configs} kconfig files ({pct}% complete):")
-            for filename in missing_files[:10]:  # Show first 10
+        # Summary
+        print(f"{'=' * 60}")
+        print("Validation Summary:")
+
+        kconfig_pct = len(existing_kconfigs) * 100 // total_configs if total_configs > 0 else 0
+        print("\nKconfig Files:")
+        print(f"  Total configs required: {total_configs}")
+        print(f"  Found: {len(existing_kconfigs)} ({kconfig_pct}%)")
+        print(f"  Missing: {len(missing_kconfigs)} ({100 - kconfig_pct}%)")
+
+        total_images = len(existing_images) + len(missing_images)
+        image_pct = len(existing_images) * 100 // total_images if total_images > 0 else 0
+        print("\nProduct Images:")
+        print(f"  Total images required: {total_images}")
+        print(f"  Found: {len(existing_images)} ({image_pct}%)")
+        print(f"  Missing: {len(missing_images)} ({100 - image_pct}%)")
+
+        has_errors = False
+
+        if missing_kconfigs:
+            has_errors = True
+            print("\n⚠ Missing kconfig files:")
+            for filename in missing_kconfigs[:10]:  # Show first 10
                 print(f"  - {filename}")
-            if len(missing_files) > 10:
-                print(f"  ... and {len(missing_files) - 10} more")
+            if len(missing_kconfigs) > 10:
+                print(f"  ... and {len(missing_kconfigs) - 10} more")
+
+            print("\n💡 To create missing kconfig files, use:")
+            print("   cd /path/to/kalico")
+            for filename in missing_kconfigs[:5]:  # Show first 5 commands
+                kconfig_path = self.kconfigs_dir / filename
+                print(f"   KCONFIG_CONFIG={kconfig_path} make menuconfig")
+            if len(missing_kconfigs) > 5:
+                print(f"   ... ({len(missing_kconfigs) - 5} more)")
+
+        if missing_images:
+            has_errors = True
+            print("\n⚠ Missing product images:")
+            for image_path in missing_images:
+                print(f"  - {image_path}")
+
+        if has_errors:
             sys.exit(1)
         else:
-            print(f"✓ All {total_configs} kconfig files present")
+            print("\n✓ All kconfig files and images are present!")
 
     def sync_to_s3(self, dry_run: bool = False):
-        """Sync index.json and builds/ directory to S3 bucket"""
+        """Sync index.json, builds/, and images/ directories to S3 bucket with delete"""
         try:
             s3_client = boto3.client("s3")
             s3_client.head_bucket(Bucket=self.S3_BUCKET)
 
             uploaded_count = 0
             total_size = 0
+            local_keys = set()
 
             # Upload index.json
             if self.index_file.exists():
+                s3_key = "index.json"
+                local_keys.add(s3_key)
                 file_size = self.index_file.stat().st_size
                 if not dry_run:
                     s3_client.upload_file(
                         str(self.index_file),
                         self.S3_BUCKET,
-                        "index.json",
+                        s3_key,
                         ExtraArgs={"ContentType": "application/json"},
                     )
                 uploaded_count += 1
@@ -401,6 +471,7 @@ class KalicoBuilder:
                 for file_path in self.builds_dir.rglob("*"):
                     if file_path.is_file():
                         s3_key = str(file_path.relative_to(self.root_dir)).replace("\\", "/")
+                        local_keys.add(s3_key)
                         file_size = file_path.stat().st_size
 
                         if not dry_run:
@@ -414,9 +485,49 @@ class KalicoBuilder:
                         uploaded_count += 1
                         total_size += file_size
 
+            # Upload images/ directory
+            if self.images_dir.exists():
+                for file_path in self.images_dir.rglob("*"):
+                    if file_path.is_file():
+                        s3_key = str(file_path.relative_to(self.root_dir)).replace("\\", "/")
+                        local_keys.add(s3_key)
+                        file_size = file_path.stat().st_size
+
+                        if not dry_run:
+                            s3_client.upload_file(
+                                str(file_path),
+                                self.S3_BUCKET,
+                                s3_key,
+                                ExtraArgs={"ContentType": self._get_content_type(file_path)},
+                            )
+
+                        uploaded_count += 1
+                        total_size += file_size
+
+            # Delete files in S3 that don't exist locally (--delete behavior)
+            deleted_count = 0
+            paginator = s3_client.get_paginator("list_objects_v2")
+            for page in paginator.paginate(Bucket=self.S3_BUCKET):
+                if "Contents" not in page:
+                    continue
+
+                for obj in page["Contents"]:
+                    s3_key = obj["Key"]
+                    # Only delete files in our managed directories
+                    managed = s3_key.startswith(("builds/", "images/")) or s3_key == "index.json"
+                    if managed and s3_key not in local_keys:
+                        if dry_run:
+                            print(f"Would delete: s3://{self.S3_BUCKET}/{s3_key}")
+                        else:
+                            s3_client.delete_object(Bucket=self.S3_BUCKET, Key=s3_key)
+                        deleted_count += 1
+
             # Summary
             action = "Would upload" if dry_run else "Uploaded"
             print(f"{action} {uploaded_count} files ({self._format_size(total_size)}) to s3://{self.S3_BUCKET}/")
+            if deleted_count > 0:
+                delete_action = "Would delete" if dry_run else "Deleted"
+                print(f"{delete_action} {deleted_count} stale files from S3")
 
             # Invalidate CloudFront
             if not dry_run and self.CLOUDFRONT_DISTRIBUTION_ID:
@@ -438,6 +549,12 @@ class KalicoBuilder:
             ".elf": "application/octet-stream",
             ".uf2": "application/octet-stream",
             ".hex": "application/octet-stream",
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".gif": "image/gif",
+            ".svg": "image/svg+xml",
+            ".webp": "image/webp",
         }
         return content_types.get(suffix, "application/octet-stream")
 
